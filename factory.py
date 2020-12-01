@@ -10,7 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from app.Common import bp
 from app.Common.Error import handle_404_error, handle_500_error
-from app.Views.Project.ProjectM import ProjectM
+from app.Router.ProjectRouter import ProjectBlue
 
 db = SQLAlchemy()
 
@@ -29,6 +29,6 @@ def create_app():
     app.register_error_handler(404, handle_404_error)
     app.register_error_handler(500, handle_500_error)
     # 蓝图注册写在这里
-    app.register_blueprint(ProjectM, url_prefix='/api/v1')
+    app.register_blueprint(ProjectBlue, url_prefix='/api/v1')
 
     return app
