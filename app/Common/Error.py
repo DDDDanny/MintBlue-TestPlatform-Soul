@@ -4,8 +4,8 @@
 # @File    : Error.py
 # @Describe: 异常处理
 
-from Common import bp
-from Common.Result import Result
+from app.Common import bp
+from app.Common.Result import Result
 
 from flask import jsonify
 from werkzeug.http import HTTP_STATUS_CODES

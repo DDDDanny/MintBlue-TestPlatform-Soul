@@ -4,7 +4,7 @@
 # @File    : Result.py
 # @describe: 封装处理请求结果
 
-from Common.Constant import SUCCESS_CODE, ERROR_CODE
+from app.Common.Constant import SUCCESS_CODE, ERROR_CODE
 
 
 class Result(object):
@@ -21,8 +21,10 @@ class Result(object):
     # 生产Response结果
     def create_result(self):
         base = {
-            'code': self.code,
-            'msg': self.msg
+            'status': {
+                'code': self.code,
+                'msg': self.msg
+            }
         }
         if self.data is not None:
             base['data'] = self.data
