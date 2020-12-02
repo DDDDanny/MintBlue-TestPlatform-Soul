@@ -10,10 +10,29 @@ from app.Common.Result import Result
 ProjectBlue = Blueprint('ProjectBlue', __name__)
 
 
+@ProjectBlue.route('/project/list', methods=['GET'])
+def project_list():
+    """
+    Desc: 项目列表接口
+    """
+    return Result().success()
+
+
 @ProjectBlue.route('/project/add', methods=['POST'])
-def add_project():
+def project_add():
+    """
+    Desc: 新增项目接口
+    """
     data = {
         'projectName': '测试项目',
         'remark': '这是一个备注信息'
     }
     return Result(data).fail()
+
+
+@ProjectBlue.route('/project/edit', methods=['POST'])
+def project_edit():
+    """
+    Desc: 编辑项目接口、删除项目（逻辑删除）也用这个接口
+    """
+    return Result().success()
