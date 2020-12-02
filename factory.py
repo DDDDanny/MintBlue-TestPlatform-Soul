@@ -8,16 +8,18 @@ from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-from app.Common import bp
-from app.Common.Error import handle_404_error, handle_500_error
-from app.Router.ProjectRouter import ProjectBlue
 
 db = SQLAlchemy()
+
 
 def register_center(app):
     """
     desc: 注册中心
     """
+    # 解决无法引用db的问题，可能是循环依赖导致的
+    from app.Common.Error import handle_404_error, handle_500_error
+    from app.Router.ProjectRouter import ProjectBlue
+
     # 注册异常处理方法
     app.register_error_handler(404, handle_404_error)
     app.register_error_handler(500, handle_500_error)
@@ -34,8 +36,9 @@ def create_app():
     # 处理跨域
     CORS(app, supports_credentials=True)
     # 配置数据库信息
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:admin@127.0.0.1:3306/mintblue_auto_test'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456.@127.0.0.1:3306/mintblue_auto_test'
+    # 禁止数据的修改追踪(需要消耗资源)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # 初始化各种扩展库
     db.init_app(app)
     # 蓝图注册中心

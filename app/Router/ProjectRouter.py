@@ -5,8 +5,12 @@
 # @Describe: 项目管理相关路由管理
 
 from flask import Blueprint, request, abort
-from app.Common.Result import Result
 
+from app.Common.Result import Result
+from app.Model.ProjectModel import ProjectModel
+
+
+# 声明蓝图
 ProjectBlue = Blueprint('ProjectBlue', __name__)
 
 
@@ -15,7 +19,11 @@ def project_list():
     """
     Desc: 项目列表接口
     """
-    return Result().success()
+    # 查询获取对象信息
+    data_Obj = ProjectModel.query.all()
+    # 序列化处理
+    data = [item.query_one() for item in data_Obj]
+    return Result(data).success()
 
 
 @ProjectBlue.route('/project/add', methods=['POST'])
