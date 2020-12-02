@@ -14,8 +14,21 @@ from app.Router.ProjectRouter import ProjectBlue
 
 db = SQLAlchemy()
 
-# 工厂函数
+def register_center(app):
+    """
+    desc: 注册中心
+    """
+    # 注册异常处理方法
+    app.register_error_handler(404, handle_404_error)
+    app.register_error_handler(500, handle_500_error)
+    # 蓝图注册写在这里
+    app.register_blueprint(ProjectBlue, url_prefix='/api/v1')
+
+
 def create_app():
+    """
+    desc：工厂函数
+    """
     # 实例化Flask
     app = Flask(__name__)
     # 处理跨域
@@ -25,10 +38,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     # 初始化各种扩展库
     db.init_app(app)
-    # 注册异常处理方法
-    app.register_error_handler(404, handle_404_error)
-    app.register_error_handler(500, handle_500_error)
-    # 蓝图注册写在这里
-    app.register_blueprint(ProjectBlue, url_prefix='/api/v1')
+    # 蓝图注册中心
+    register_center(app)
 
     return app
