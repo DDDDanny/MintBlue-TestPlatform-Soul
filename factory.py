@@ -19,12 +19,14 @@ def register_center(app):
     # 解决无法引用db的问题，可能是循环依赖导致的
     from app.Common.Error import handle_404_error, handle_500_error
     from app.Router.ProjectRouter import ProjectBlue
+    from app.Router.UserRouter import UserBlue
 
     # 注册异常处理方法
     app.register_error_handler(404, handle_404_error)
     app.register_error_handler(500, handle_500_error)
     # 蓝图注册写在这里
     app.register_blueprint(ProjectBlue, url_prefix='/api/v1')
+    app.register_blueprint(UserBlue, url_prefix='/api/v1')
 
 
 def create_app():
