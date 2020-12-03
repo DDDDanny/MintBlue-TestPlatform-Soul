@@ -11,7 +11,8 @@ from factory import db
 class UserModel(db.Model):
     # 定义表名
     __tablename__ = 'user'
-    user_id = db.Column(db.String(50), primary_key=True)
+    # 主键必须要加 unique=True，否则会报错
+    user_id = db.Column(db.String(50), primary_key=True, unique=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(50), nullable=False)
 
