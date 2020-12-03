@@ -22,7 +22,7 @@ def user_register():
     return Result().success()
 
 
-@UserBlue.route('/user/login', methods=['POST']):
+@UserBlue.route('/user/login', methods=['POST'])
 def user_login():
     """
     Desc: 用户登录
