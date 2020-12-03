@@ -19,8 +19,7 @@ class ProjectModel(db.Model):
 
     def query_one(self):
         """
-        序列化
-        查询一条数据
+        序列化: 查询一条数据
         """
         res = {
             'projectID': self.project_id,
