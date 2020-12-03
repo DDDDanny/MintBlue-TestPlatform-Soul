@@ -14,6 +14,8 @@ class ProjectModel(db.Model):
     project_id = db.Column(db.String(50), primary_key=True)
     project_name = db.Column(db.String(20), unique=True)
     remark = db.Column(db.String(50))
+    create_time = db.Column(db.Date)
+    creator = db.Column(db.String(50))
 
     def query_one(self):
         """
@@ -23,6 +25,8 @@ class ProjectModel(db.Model):
         res = {
             'projectID': self.project_id,
             'projectName': self.project_name,
-            'remark': self.remark
+            'remark': self.remark,
+            'createTime': self.create_time,
+            'creator': self.creator
         }
         return res
