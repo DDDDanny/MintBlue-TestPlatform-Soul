@@ -21,7 +21,9 @@ def user_register():
     """
     Desc: 用户注册
     """
+    # 接收前端数据
     form_data = eval(request.get_data(as_text=True))
+    # 解析数据
     username, password = form_data['username'], form_data['password']
     data = UserRegister().user_register(username, password)
     return Result(data).success() if data else Result(msg='用户名已存在，请更换用户名').success()

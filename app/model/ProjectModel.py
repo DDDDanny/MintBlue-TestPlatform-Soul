@@ -17,10 +17,8 @@ class ProjectModel(db.Model):
     create_time = db.Column(db.Date)
     creator = db.Column(db.String(50))
 
+    # 序列化: 查询一条数据
     def query_one(self):
-        """
-        序列化: 查询一条数据
-        """
         res = {
             'projectID': self.project_id,
             'projectName': self.project_name,

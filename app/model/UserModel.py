@@ -16,10 +16,8 @@ class UserModel(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(50), nullable=False)
 
+    # 序列化: 查询一条数据
     def query_one(self):
-        """
-        序列化: 查询一条数据
-        """
         res = {
             'userID': self.user_id,
             'userName': self.username,

@@ -14,24 +14,17 @@ class UserRegister(object):
     def __init__(self):
         pass
 
+    # 生成UUID
     def create_uuid(self):
-        """
-        生成UUID
-        """
         return str(uuid.uuid4())
     
+    # 查询用户信息
     def query_user_info(self, username):
-        """
-        查询用户信息
-        """
         data_obj = UserModel.query.filter_by(username=username).first()
         return data_obj
 
-    
+    # 用户注册逻辑
     def user_register(self, username, password):
-        """
-        用户注册逻辑
-        """
         if self.query_user_info(username) is not None:
             return {}
         # 新增用户信息
