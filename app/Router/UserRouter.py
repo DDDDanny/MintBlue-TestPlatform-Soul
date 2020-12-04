@@ -8,9 +8,8 @@ import uuid
 
 from flask import Blueprint, request, abort
 
-from factory import db
 from app.Common.Result import Result
-from app.Model.UserModel import UserModel
+from app.Views.User.UserRegister import UserRegister
 
 
 # 声明蓝图
@@ -22,16 +21,10 @@ def user_register():
     """
     Desc: 用户注册
     """
-    # 生成UUID
-    user_id = str(uuid.uuid4())
-    # 新增用户信息
-    user_info = UserModel(user_id=user_id, username='admin', password='admin')
-    db.session.add(user_info)
-    db.session.commit()
-    # 查询获取对象信息
-    data_Obj = UserModel.query.filter_by(user_id=user_id).first()
-    data = data_Obj.query_one()
-    return Result(data).success()
+    form_data = eval(request.get_data(as_text=True))
+    username, password = form_data['username'], form_data['password']
+    data = UserRegister().user_register(username, password)
+    return Result(data).success() if data else Result(msg='用户名已存在，请更换用户名').success()
 
 
 @UserBlue.route('/user/login', methods=['POST'])
