@@ -19,11 +19,12 @@ def register_center(app):
     desc: 注册中心
     """
     # 解决无法引用db的问题，可能是循环依赖导致的
-    from app.Common.Error import handle_404_error, handle_500_error
+    from app.Common.Error import handle_404_error, handle_500_error, handle_401_error
     from app.Router.ProjectRouter import ProjectBlue
     from app.Router.UserRouter import UserBlue
 
     # 注册异常处理方法
+    app.register_error_handler(401, handle_401_error)
     app.register_error_handler(404, handle_404_error)
     app.register_error_handler(500, handle_500_error)
     # 蓝图注册写在这里
@@ -47,7 +48,6 @@ def create_app():
     # Only allow JWT cookies to be sent over https. 
     # In production, this should likely be True
     app.config['JWT_COOKIE_SECURE'] = False
-    app.config['JWT_CSRF_IN_COOKIES'] = True
     app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/v1'
     # app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
     app.config['JWT_COOKIE_CSRF_PROTECT'] = True

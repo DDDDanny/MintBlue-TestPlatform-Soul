@@ -31,3 +31,8 @@ def handle_404_error(error):
 @bp.errorhandler(500)
 def handle_500_error(error):
     return error_response(500)
+
+# 处理401错误
+@bp.errorhandler(401)
+def handle_401_error(error):
+    return error_response(401)
