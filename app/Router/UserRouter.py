@@ -6,9 +6,11 @@
 
 import uuid
 
-from flask import Blueprint, request, abort
+from flask_jwt_extended import set_access_cookies
+from flask import Blueprint, request, abort, jsonify
 
 from app.Common.Result import Result
+from app.Views.User.UserLogin import UserLogin
 from app.Views.User.UserRegister import UserRegister
 
 
@@ -34,4 +36,11 @@ def user_login():
     """
     Desc: 用户登录
     """
-    return Result().success()
+    # 接收前端数据
+    form_data = eval(request.get_data(as_text=True))
+    # 解析数据
+    username, password = form_data['username'], form_data['password']
+    response = UserLogin().user_login(username, password)
+    if 'data' in response.json:
+        set_access_cookies(response, response.json['data'])
+    return response
