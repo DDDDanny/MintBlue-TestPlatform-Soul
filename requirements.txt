@@ -2,3 +2,4 @@ flask
 Flask-Cors
 Flask-SQLAlchemy
 PyMySQL
+Flask-JWT-Extended

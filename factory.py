@@ -7,9 +7,11 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
 
 
 db = SQLAlchemy()
+jwt = JWTManager()
 
 
 def register_center(app):
@@ -41,8 +43,19 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456.@127.0.0.1:3306/mintblue_auto_test'
     # 禁止数据的修改追踪(需要消耗资源)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+    # Only allow JWT cookies to be sent over https. 
+    # In production, this should likely be True
+    app.config['JWT_COOKIE_SECURE'] = False
+    app.config['JWT_CSRF_IN_COOKIES'] = True
+    app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/v1'
+    # app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+    # Set the secret key to sign the JWTs with
+    app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this!
     # 初始化各种扩展库
     db.init_app(app)
+    jwt = JWTManager(app)
     # 蓝图注册中心
     register_center(app)
 
