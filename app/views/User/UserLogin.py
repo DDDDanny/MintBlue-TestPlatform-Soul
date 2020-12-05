@@ -5,7 +5,7 @@
 # @Describe: 用户登录业务逻辑
 
 from flask import jsonify, make_response
-from flask_jwt_extended import create_access_token, get_jwt_identity
+from flask_jwt_extended import create_access_token
 
 from factory import db
 from app.Common.Result import Result
@@ -28,7 +28,11 @@ class UserLogin(object):
         elif data_obj is None or data_obj.query_one()['password'] != password:
             res = Result(msg='用户名或者密码错误').success()
         else:
-            user_id = data_obj.query_one()['userID']
-            access_token = create_access_token(identity=user_id)
-            res = Result(access_token).success()
+            data = data_obj.query_one()
+            access_token = create_access_token(identity=data['userID'])
+            res = Result(data).success()
+        return make_response(res), access_token
+
+    def user_logout(self):
+        res = Result().success()
         return make_response(res)

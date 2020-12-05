@@ -6,7 +6,8 @@
 
 import uuid
 
-from flask_jwt_extended import set_access_cookies
+from flask_jwt_extended import set_access_cookies, jwt_required, get_jwt_identity
+from flask_jwt_extended import unset_jwt_cookies
 from flask import Blueprint, request, abort, jsonify
 
 from app.Common.Result import Result
@@ -41,6 +42,18 @@ def user_login():
     # 解析数据
     username, password = form_data['username'], form_data['password']
     response = UserLogin().user_login(username, password)
-    if 'data' in response.json:
-        set_access_cookies(response, response.json['data'])
+    if 'data' in response[0].json:
+        set_access_cookies(response[0], response[1])
+    return response[0]
+
+
+@UserBlue.route('/user/logout', methods=['POST'])
+# @get_jwt_identity
+def logout():
+    """
+    Desc: 用户登出
+    """
+    response = UserLogin().user_logout()
+    unset_jwt_cookies(response)
+    # user_id = get_jwt_identity()
     return response
