@@ -16,11 +16,13 @@ class UserLogin(object):
     def __init__(self):
         pass
 
+    # 查询用户信息
     @staticmethod
     def __query_user_info(username):
         data_obj = UserModel.query.filter_by(username=username).first()
         return data_obj
 
+    # 用户登录逻辑
     def user_login(self, username, password):
         data_obj = self.__query_user_info(username)
         if username == '' or password == '':
@@ -33,6 +35,7 @@ class UserLogin(object):
             res = Result(data).success()
         return make_response(res), access_token
 
+    # 用户退出逻辑
     def user_logout(self):
         res = Result().success()
         return make_response(res)
