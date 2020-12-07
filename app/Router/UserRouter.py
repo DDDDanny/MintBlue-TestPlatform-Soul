@@ -6,11 +6,10 @@
 
 import uuid
 
+from flask import Blueprint, request
 from flask_jwt_extended import set_access_cookies, jwt_required, get_jwt_identity
 from flask_jwt_extended import unset_jwt_cookies
-from flask import Blueprint, request, abort, jsonify
 
-from app.Common.Result import Result
 from app.Views.User.UserLogin import UserLogin
 from app.Views.User.UserRegister import UserRegister
 
@@ -28,8 +27,8 @@ def user_register():
     form_data = eval(request.get_data(as_text=True))
     # 解析数据
     username, password = form_data['username'], form_data['password']
-    data = UserRegister().user_register(username, password)
-    return Result(data).success() if data else Result(msg='用户名已存在，请更换用户名').success()
+    response = UserRegister().user_register(username, password)
+    return response
 
 
 @UserBlue.route('/user/login', methods=['POST'])

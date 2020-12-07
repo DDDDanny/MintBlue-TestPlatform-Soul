@@ -4,6 +4,8 @@
 # @File    : UserModel.py
 # @Describe: 用户Model层
 
+from datetime import datetime
+
 from factory import db
 
 
@@ -15,7 +17,7 @@ class UserModel(db.Model):
     user_id = db.Column(db.String(50), primary_key=True, unique=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(50), nullable=False)
-    create_time = db.Column(db.Date)
+    create_time = db.Column(db.Date, default=datetime.now)
 
     # 序列化: 查询一条数据
     def query_one(self):
