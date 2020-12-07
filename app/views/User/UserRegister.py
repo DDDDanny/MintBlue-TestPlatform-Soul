@@ -9,6 +9,7 @@ import uuid
 from flask import make_response
 
 from factory import db
+from app.Utils.MD5 import md5_encrypt
 from app.Common.Result import Result
 from app.Model.UserModel import UserModel
 
@@ -34,7 +35,8 @@ class UserRegister(object):
         else:
             # 新增用户信息
             user_id = self.create_uuid()
-            user_info = UserModel(user_id=user_id, username=username, password=password)
+            new_pwd = md5_encrypt(password)
+            user_info = UserModel(user_id=user_id, username=username, password=new_pwd)
             db.session.add(user_info)
             db.session.commit()
             # 查询获取对象信息
