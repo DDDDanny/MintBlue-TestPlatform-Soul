@@ -6,8 +6,11 @@
 
 from flask import Blueprint, request, abort
 
+from flask_jwt_extended import get_jwt_identity, jwt_required
+
 from app.Common.Result import Result
 from app.Model.ProjectModel import ProjectModel
+from app.Views.Project.ProjectM import ProjectM
 
 
 # 声明蓝图
@@ -27,15 +30,16 @@ def project_list():
 
 
 @ProjectBlue.route('/project/add', methods=['POST'])
+@jwt_required
 def project_add():
     """
     Desc: 新增项目接口
     """
-    data = {
-        'projectName': '测试项目',
-        'remark': '这是一个备注信息'
-    }
-    return Result(data).fail()
+    form_data = eval(request.get_data(as_text=True))
+    pro_name, remark = form_data['projectName'], form_data['remark']
+    user_id = get_jwt_identity()
+    response = ProjectM().add_project(user_id, pro_name, remark)
+    return response
 
 
 @ProjectBlue.route('/project/edit', methods=['POST'])

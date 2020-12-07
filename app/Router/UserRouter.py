@@ -7,8 +7,7 @@
 import uuid
 
 from flask import Blueprint, request
-from flask_jwt_extended import set_access_cookies, jwt_required, get_jwt_identity
-from flask_jwt_extended import unset_jwt_cookies
+from flask_jwt_extended import set_access_cookies, unset_jwt_cookies
 
 from app.Views.User.UserLogin import UserLogin
 from app.Views.User.UserRegister import UserRegister
@@ -47,12 +46,10 @@ def user_login():
 
 
 @UserBlue.route('/user/logout', methods=['POST'])
-# @get_jwt_identity
 def logout():
     """
     Desc: 用户登出
     """
     response = UserLogin().user_logout()
     unset_jwt_cookies(response)
-    # user_id = get_jwt_identity()
     return response
