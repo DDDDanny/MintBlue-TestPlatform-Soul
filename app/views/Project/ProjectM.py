@@ -50,17 +50,22 @@ class ProjectM(object):
     # 获取项目列表
     def get_project_list(self):
         # 查询获取对象信息
-        sql = 'select project_id, project_name, remark, username from project join user'
+        sql = 'select project_id, project_name, remark, username from project join user where is_delete=0'
         data_Obj = db.session.execute(sql)
         data = [self.__pro_info_serializer(item) for item in data_Obj]
         res = Result(data).success()
         return make_response(res)
 
     # 编辑项目
-    def edit_project(self, pro_id, pro_name, remark):
+    def edit_project(self, is_del, pro_id, pro_name, remark):
         pro_info = ProjectModel.query.filter_by(project_id=pro_id).first()
         if pro_info is None:
             res = Result(msg='Project ID 无效，没有查找到对应的项目').success()
+        # 判断是否删除
+        elif is_del == 1:
+            pro_info.is_delete = 1
+            db.session.commit()
+            res = Result(msg='项目删除成功').success()
         elif pro_name == '':
             res = Result(msg='项目名称不能为空').success()
         else:
