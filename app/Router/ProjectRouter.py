@@ -41,6 +41,7 @@ def project_add():
 
 
 @ProjectBlue.route('/project/edit', methods=['POST'])
+@jwt_required
 def project_edit():
     """
     Desc: 编辑项目接口、删除项目（逻辑删除）也用这个接口
