@@ -18,15 +18,25 @@ class ProjectM(object):
         pass
 
     # 生成UUID
-    def create_uuid(self):
+    @staticmethod
+    def __create_uuid(self):
         return str(uuid.uuid4())
+    
+    # 序列化项目信息
+    @staticmethod
+    def __pro_info_serializer(pro_item):
+        return {
+            'projectName': pro_item[0],
+            'remark': pro_item[1],
+            'creator': pro_item[2]
+        }
     
     # 新增项目
     def add_project(self, user_id, pro_name, remark):
         if pro_name == '':
             res = Result(msg='项目名称不能为空').success()
         else:
-            pro_id = self.create_uuid()
+            pro_id = self.__create_uuid()
             pro_info = ProjectModel(
                 project_id=pro_id, project_name=pro_name,
                 remark=remark, creator=user_id
@@ -36,3 +46,11 @@ class ProjectM(object):
             res = Result(msg='项目新增成功').success()
         return make_response(res)
 
+    # 获取项目列表
+    def get_project_list(self):
+        # 查询获取对象信息
+        sql = 'select project_name, remark, username from project join user'
+        data_Obj = db.session.execute(sql)
+        data = [self.__pro_info_serializer(item) for item in data_Obj]
+        res = Result(data).success()
+        return make_response(res)

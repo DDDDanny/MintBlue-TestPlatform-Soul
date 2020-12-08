@@ -18,15 +18,13 @@ ProjectBlue = Blueprint('ProjectBlue', __name__)
 
 
 @ProjectBlue.route('/project/list', methods=['GET'])
+@jwt_required
 def project_list():
     """
     Desc: 项目列表接口
     """
-    # 查询获取对象信息
-    data_Obj = ProjectModel.query.all()
-    # 序列化处理
-    data = [item.query_one() for item in data_Obj]
-    return Result(data).success()
+    response = ProjectM().get_project_list()
+    return response
 
 
 @ProjectBlue.route('/project/add', methods=['POST'])
