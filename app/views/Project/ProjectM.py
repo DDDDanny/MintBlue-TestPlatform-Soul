@@ -21,16 +21,17 @@ class ProjectM(object):
     @staticmethod
     def __create_uuid(self):
         return str(uuid.uuid4())
-    
+
     # 序列化项目信息
     @staticmethod
     def __pro_info_serializer(pro_item):
         return {
-            'projectName': pro_item[0],
-            'remark': pro_item[1],
-            'creator': pro_item[2]
+            'projectID': pro_item[0],
+            'projectName': pro_item[1],
+            'remark': pro_item[2],
+            'creator': pro_item[3]
         }
-    
+
     # 新增项目
     def add_project(self, user_id, pro_name, remark):
         if pro_name == '':
@@ -49,8 +50,22 @@ class ProjectM(object):
     # 获取项目列表
     def get_project_list(self):
         # 查询获取对象信息
-        sql = 'select project_name, remark, username from project join user'
+        sql = 'select project_id, project_name, remark, username from project join user'
         data_Obj = db.session.execute(sql)
         data = [self.__pro_info_serializer(item) for item in data_Obj]
         res = Result(data).success()
+        return make_response(res)
+
+    # 编辑项目
+    def edit_project(self, pro_id, pro_name, remark):
+        pro_info = ProjectModel.query.filter_by(project_id=pro_id).first()
+        if pro_info is None:
+            res = Result(msg='Project ID 无效，没有查找到对应的项目').success()
+        elif pro_name == '':
+            res = Result(msg='项目名称不能为空').success()
+        else:
+            pro_info.project_name = pro_name
+            pro_info.remark = remark
+            db.session.commit()
+            res = Result(msg='项目信息修改成功').success()
         return make_response(res)

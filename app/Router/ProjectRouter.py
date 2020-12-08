@@ -45,4 +45,7 @@ def project_edit():
     """
     Desc: 编辑项目接口、删除项目（逻辑删除）也用这个接口
     """
-    return Result().success()
+    form_data = eval(request.get_data(as_text=True))
+    pro_id, pro_name, remark = form_data['projectID'], form_data['projectName'], form_data['remark']
+    response = ProjectM().edit_project(pro_id, pro_name, remark)
+    return response
