@@ -22,7 +22,8 @@ def version_list():
     """
     Desc: 版本信息列表接口
     """
-    return Result().success()
+    response = VersionM().get_version_list()
+    return response
 
 
 @VersionBlue.route('/version/add', methods=['POST'])

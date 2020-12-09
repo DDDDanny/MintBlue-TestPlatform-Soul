@@ -23,6 +23,15 @@ class VersionM(object):
     def __create_uuid():
         return str(uuid.uuid4())
 
+    # 序列化版本号信息
+    @staticmethod
+    def __ver_info_serializer(ver_item):
+        return {
+            'version': ver_item[0],
+            'remark': ver_item[1],
+            'createTime': ver_item[2]
+        }
+
     # 新增版本号
     def add_version(self, pro_id, version, remark):
         pro_info = ProjectModel.query.filter_by(project_id=pro_id).first()
@@ -39,4 +48,13 @@ class VersionM(object):
             db.session.add(version_info)
             db.session.commit()
             res = Result(msg='新增版本号成功').success()
+        return make_response(res)
+
+    # 版本号列表
+    def get_version_list(self):
+        # 查询获取对象信息
+        sql = 'select version, remark, create_time from version where is_delete=0;'
+        data_obj = db.session.execute(sql)
+        data = [self.__ver_info_serializer(item) for item in data_obj]
+        res = Result(data).success()
         return make_response(res)
