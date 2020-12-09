@@ -19,7 +19,7 @@ class ProjectM(object):
 
     # 生成UUID
     @staticmethod
-    def __create_uuid(self):
+    def __create_uuid():
         return str(uuid.uuid4())
 
     # 序列化项目信息

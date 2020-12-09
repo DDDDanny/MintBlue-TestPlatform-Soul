@@ -10,6 +10,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from app.Common.Result import Result
 from app.Model.VersionModel import VersionModel
+from app.Views.Project.VersionM import VersionM
 
 
 # 声明蓝图
@@ -29,7 +30,10 @@ def version_add():
     """
     Desc: 新增版本信息接口
     """
-    return Result().success()
+    form_data = eval(request.get_data(as_text=True))
+    pro_id, version, remark = form_data['projectID'], form_data['version'], form_data['remark']
+    response = VersionM().add_version(pro_id, version, remark)
+    return response
 
 
 @VersionBlue.route('/version/edit', methods=['POST'])

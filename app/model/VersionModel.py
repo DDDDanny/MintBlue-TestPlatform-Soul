@@ -16,6 +16,6 @@ class VersionModel(db.Model):
     ver_id = db.Column(db.String(50), primary_key=True, unique=True)
     version = db.Column(db.String(15), nullable=False)
     remark = db.Column(db.String(50))
-    is_delete = db.Column(db.Integer, nullable=False)
+    is_delete = db.Column(db.Integer, nullable=False, default=0)
     create_time = db.Column(db.Date, default=datetime.now)
     pro_id = db.Column(db.String(50), db.ForeignKey('project.project_id'), nullable=False)
