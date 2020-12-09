@@ -8,7 +8,6 @@ from flask import Blueprint, request, abort
 
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
-from app.Common.Result import Result
 from app.Model.ProjectModel import ProjectModel
 from app.Views.Project.ProjectM import ProjectM
 

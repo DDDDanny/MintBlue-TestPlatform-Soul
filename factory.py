@@ -22,6 +22,7 @@ def register_center(app):
     from app.Common.Error import handle_404_error, handle_500_error, handle_401_error
     from app.Router.ProjectRouter import ProjectBlue
     from app.Router.UserRouter import UserBlue
+    from app.Router.VersionRouter import VersionBlue
 
     # 注册异常处理方法
     app.register_error_handler(401, handle_401_error)
@@ -30,6 +31,7 @@ def register_center(app):
     # 蓝图注册写在这里
     app.register_blueprint(ProjectBlue, url_prefix='/api/v1')
     app.register_blueprint(UserBlue, url_prefix='/api/v1')
+    app.register_blueprint(VersionBlue, url_prefix='/api/v1')
 
 
 def create_app():
