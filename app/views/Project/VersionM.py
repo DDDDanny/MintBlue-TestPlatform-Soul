@@ -27,9 +27,10 @@ class VersionM(object):
     @staticmethod
     def __ver_info_serializer(ver_item):
         return {
-            'version': ver_item[0],
-            'remark': ver_item[1],
-            'createTime': ver_item[2]
+            'verID': ver_item[0],
+            'version': ver_item[1],
+            'remark': ver_item[2],
+            'createTime': ver_item[3]
         }
 
     # 新增版本号
@@ -53,8 +54,22 @@ class VersionM(object):
     # 版本号列表
     def get_version_list(self):
         # 查询获取对象信息
-        sql = 'select version, remark, create_time from version where is_delete=0;'
+        sql = 'select ver_id, version, remark, create_time from version where is_delete=0;'
         data_obj = db.session.execute(sql)
         data = [self.__ver_info_serializer(item) for item in data_obj]
         res = Result(data).success()
+        return make_response(res)
+
+    # 编辑版本号
+    def edit_version(self, ver_id, version, remark):
+        ver_info = VersionModel.query.filter_by(ver_id=ver_id).first()
+        if ver_info is None:
+            res = Result(msg='Version ID 无效，没有找到对应的版本').success()
+        elif version == '':
+            res = Result(msg='版本号不能为空').success()
+        else:
+            ver_info.version = version
+            ver_info.remark = remark
+            db.session.commit()
+            res = Result(msg='版本号修改成功').success()
         return make_response(res)
