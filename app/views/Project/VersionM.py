@@ -61,10 +61,14 @@ class VersionM(object):
         return make_response(res)
 
     # 编辑版本号
-    def edit_version(self, ver_id, version, remark):
+    def edit_version(self, is_del, ver_id, version, remark):
         ver_info = VersionModel.query.filter_by(ver_id=ver_id).first()
         if ver_info is None:
             res = Result(msg='Version ID 无效，没有找到对应的版本').success()
+        elif is_del == 1:
+            ver_info.is_delete = 1
+            db.session.commit()
+            res = Result(msg='版本号删除成功').success()
         elif version == '':
             res = Result(msg='版本号不能为空').success()
         else:
