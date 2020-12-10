@@ -17,4 +17,5 @@ class EnvModel(db.Model):
     env_name = db.Column(db.String(15), nullable=False)
     base_url = db.Column(db.String(50), nullable=False)
     create_time = db.Column(db.Date, default=datetime.now)
+    is_delete = db.Column(db.Integer, nullable=False, default=0)
     pro_id = db.Column(db.String(50), db.ForeignKey('project.project_id'), nullable=False)
