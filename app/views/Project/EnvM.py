@@ -23,6 +23,15 @@ class EnvM(object):
     def __create_uuid():
         return str(uuid.uuid4())
     
+    @staticmethod
+    def __env_info_serializer(env_item):
+        return {
+            'envId': env_item[0],
+            'envName': env_item[1],
+            'baseURL': env_item[2],
+            'createTime': env_item[3]
+        }
+    
     # 新增环境信息
     def add_env(self, pro_id, env_name, base_url):
         pro_info = ProjectModel.query.filter_by(project_id=pro_id).first()
@@ -39,4 +48,12 @@ class EnvM(object):
             db.session.add(env_info)
             db.session.commit()
             res = Result(msg='新增环境信息成功').success()
+        return make_response(res)
+    
+    # 环境信息列表
+    def get_env_list(self):
+        sql = 'select env_id, env_name, base_url, create_time from env;'
+        data_obj = db.session.execute(sql)
+        data = [self.__env_info_serializer(item) for item in data_obj]
+        res = Result(data).success()
         return make_response(res)

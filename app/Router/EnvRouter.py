@@ -22,7 +22,8 @@ def env_list():
     """
     Desc: 环境参数信息列表接口
     """
-    return Result().success()
+    response = EnvM().get_env_list()
+    return response
 
 
 @EnvBlue.route('/env/add', methods=['POST'])
