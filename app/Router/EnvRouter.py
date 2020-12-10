@@ -10,6 +10,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from app.Common.Result import Result
 from app.Model.EnvModel import EnvModel
+from app.Views.Project.EnvM import EnvM
 
 
 # 声明蓝图
@@ -29,7 +30,10 @@ def env_add():
     """
     Desc: 新增环境信息接口
     """
-    return Result().success()
+    form_data = eval(request.get_data(as_text=True))
+    pro_id, env_name, base_url = form_data['projectID'], form_data['envName'], form_data['baseURL']
+    response = EnvM().add_env(pro_id, env_name, base_url)
+    return response
 
 
 @EnvBlue.route('/env/edit', methods=['POST'])
