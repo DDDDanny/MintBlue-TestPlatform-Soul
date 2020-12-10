@@ -57,3 +57,17 @@ class EnvM(object):
         data = [self.__env_info_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
+    
+    # 编辑环境信息
+    def edit_env(self, env_id, env_name, base_url):
+        env_info = EnvModel.query.filter_by(env_id=env_id).first()
+        if env_info is None:
+            res = Result(msg='Env ID 无效，没有找到对应的版本').success()
+        elif env_name == '' or base_url == '':
+            res = Result(msg='环境名称或基础地址不能为空').success()
+        else:
+            env_info.env_name = env_name
+            env_info.base_url = base_url
+            db.session.commit()
+            res = Result(msg='环境信息修改成功').success()
+        return make_response(res)

@@ -42,4 +42,7 @@ def env_edit():
     """
     Desc: 编辑环境信息接口(删除也用这个接口)
     """
-    return Result().success()
+    form_data = eval(request.get_data(as_text=True))
+    env_id, env_name, base_url = form_data['envID'], form_data['envName'], form_data['baseURL']
+    response = EnvM().edit_env(env_id, env_name, base_url)
+    return response
