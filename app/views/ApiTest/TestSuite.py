@@ -21,10 +21,27 @@ class TestSuite(object):
     @staticmethod
     def __create_uuid():
         return str(uuid.uuid4())
+    
+    # 序列化测试集信息
+    @staticmethod
+    def __suite_info_serializer(suite_item):
+        return {
+            'suiteID': suite_item[0],
+            'suiteName': suite_item[1],
+            'remark': suite_item[2],
+            'creator': suite_item[3],
+            'proID': suite_item[4],
+            'updateTime': suite_item[5]
+        }
 
     # 测试用例集列表
-    def get_suite_list(self):
-        pass
+    def get_suite_list(self, pro_id):
+        sql = 'select suite_id, suite_name, remark, username, pro_id, update_time from suite ' \
+              'left join user on creator=user_id where pro_id = "{}"'.format(pro_id)
+        data_obj = db.session.execute(sql)
+        data = [self.__suite_info_serializer(item) for item in data_obj]
+        res = Result(data).success()
+        return make_response(res)
 
     # 测试用例集新增
     def add_suite(self, user_id, suite_name, remark, pro_id):

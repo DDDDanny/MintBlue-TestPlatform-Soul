@@ -22,8 +22,9 @@ def suite_list():
     """
     Desc: 测试集获取列表接口
     """
-    return Result().success()
-
+    pro_id = request.args.get('proID')
+    response = TestSuite().get_suite_list(pro_id)
+    return response
 
 @SuiteBlue.route('/suite/add', methods=['POST'])
 @jwt_required
