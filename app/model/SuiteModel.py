@@ -18,6 +18,6 @@ class SuiteModel(db.Model):
     remark = db.Column(db.String(50))
     is_delete = db.Column(db.Integer, nullable=False, default=0)
     create_time = db.Column(db.Date, default=datetime.now)
-    update_time = db.Column(db.Date, default=datetime.now, onupdate=datetime.datetime.now)
+    update_time = db.Column(db.Date, default=datetime.now, onupdate=datetime.now)
     pro_id = db.Column(db.String(50), db.ForeignKey('project.project_id'), nullable=False)
     creator = db.Column(db.String(50), db.ForeignKey('user.user_id'), nullable=False)

@@ -10,6 +10,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from app.Common.Result import Result
 from app.Model.VersionModel import VersionModel
+from app.Views.ApiTest.TestSuite import TestSuite
 
 
 # 声明蓝图
@@ -25,11 +26,16 @@ def suite_list():
 
 
 @SuiteBlue.route('/suite/add', methods=['POST'])
+@jwt_required
 def suite_add():
     """
     Desc: 新增测试集接口
     """
-    return Result().success()
+    form_data = eval(request.get_data(as_text=True))
+    suite_name, remark, pro_id = form_data['suiteName'], form_data['remark'], form_data['proID']
+    user_id = get_jwt_identity()
+    response = TestSuite().add_suite(user_id, suite_name, remark, pro_id)
+    return response
 
 
 @SuiteBlue.route('/suite/edit', methods=['POST'])
