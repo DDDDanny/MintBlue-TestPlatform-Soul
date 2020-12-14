@@ -4,6 +4,7 @@
 # @File    : ProjectM.py
 # @Describe: 项目管理业务逻辑
 
+import time
 import uuid
 
 from flask import make_response
@@ -21,15 +22,20 @@ class ProjectM(object):
     @staticmethod
     def __create_uuid():
         return str(uuid.uuid4())
+    
+    # 时间转换
+    @staticmethod
+    def __transform_time(timeObj):
+        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
 
     # 序列化项目信息
-    @staticmethod
-    def __pro_info_serializer(pro_item):
+    def __pro_info_serializer(self, pro_item):
         return {
             'projectID': pro_item[0],
             'projectName': pro_item[1],
             'remark': pro_item[2],
-            'creator': pro_item[3]
+            'creator': pro_item[3],
+            'createTime': self.__transform_time(pro_item[4]) 
         }
 
     # 新增项目
@@ -50,7 +56,7 @@ class ProjectM(object):
     # 获取项目列表
     def get_project_list(self):
         # 查询获取对象信息
-        sql = 'select project_id, project_name, remark, username from project left join user on project.creator=user.user_id where is_delete=0;'
+        sql = 'select project_id, project_name, remark, username, project.create_time from project left join user on project.creator=user.user_id where is_delete=0;'
         data_Obj = db.session.execute(sql)
         data = [self.__pro_info_serializer(item) for item in data_Obj]
         res = Result(data).success()
