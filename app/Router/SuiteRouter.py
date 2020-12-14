@@ -18,6 +18,7 @@ SuiteBlue = Blueprint('SuiteBlue', __name__)
 
 
 @SuiteBlue.route('/suite/list', methods=['GET'])
+@jwt_required
 def suite_list():
     """
     Desc: 测试集获取列表接口
@@ -40,8 +41,17 @@ def suite_add():
 
 
 @SuiteBlue.route('/suite/edit', methods=['POST'])
+@jwt_required
 def suite_edit():
     """
-    Desc: 编辑测试集接口(删除也用这个接口)
+    Desc: 编辑测试用例集(删除也用这个接口)(By Zoey)
     """
-    return Result().success()
+    try:
+        form_data = eval(request.get_data(as_text=True))
+        suite_id = form_data['suiteID']
+        suite_name, remark = form_data['suiteName'], form_data['remark']
+        is_delete = form_data['isDel']
+        response = TestSuite().edit_suite(suite_id, suite_name, remark, is_delete)
+        return response
+    except Exception as err:
+        return Result(msg='参数错误').fail()
