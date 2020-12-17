@@ -29,14 +29,15 @@ class UserLogin(object):
         new_pwd = md5_encrypt(password)  # 密码加密
         access_token = None  # 初始化access token
         if username == '' or password == '':
-            res = Result(msg='用户名或密码不能为空').success()
+            res = Result(msg='用户名或密码不能为空').fail()
         elif data_obj is None or data_obj.query_one()['password'] != new_pwd:
-            res = Result(msg='用户名或者密码错误').success()
+            res = Result(msg='用户名或者密码错误').fail()
         else:
             data = data_obj.query_one()
             access_token = create_access_token(identity=data['userID'])
+            data['access_token'] = access_token
             res = Result(data, '登录成功').success()
-        return make_response(res), access_token
+        return make_response(res)
 
     # 用户退出逻辑
     def user_logout(self):

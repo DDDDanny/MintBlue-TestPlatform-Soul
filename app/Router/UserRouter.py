@@ -40,9 +40,7 @@ def user_login():
     # 解析数据
     username, password = form_data['username'], form_data['password']
     response = UserLogin().user_login(username, password)
-    if 'data' in response[0].json:
-        set_access_cookies(response[0], response[1])
-    return response[0]
+    return response
 
 
 @UserBlue.route('/user/logout', methods=['POST'])
@@ -51,5 +49,4 @@ def logout():
     Desc: 用户登出
     """
     response = UserLogin().user_logout()
-    unset_jwt_cookies(response)
     return response

@@ -50,11 +50,12 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456.@127.0.0.1:3306/mintblue_auto_test'
     # 禁止数据的修改追踪(需要消耗资源)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+    app.config['JWT_TOKEN_LOCATION'] = ['headers']
+    app.config['JWT_HEADER_TYPE'] = 'Bearer'
     # Only allow JWT cookies to be sent over https. 
     # In production, this should likely be True
-    app.config['JWT_COOKIE_SECURE'] = False
-    app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/v1'
+    app.config['JWT_COOKIE_SECURE'] = True
+    app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
     # app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
     app.config['JWT_COOKIE_CSRF_PROTECT'] = True
     # Set the secret key to sign the JWTs with
