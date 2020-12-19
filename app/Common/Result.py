@@ -21,8 +21,10 @@ class Result(object):
     # 生产Response结果
     def create_result(self):
         base = {
-            'code': self.code,
-            'msg': self.msg
+            'status': {
+                'code': self.code,
+                'msg': self.msg
+            }
         }
         if self.data is not None:
             base['data'] = self.data
