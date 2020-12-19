@@ -16,7 +16,7 @@ class ProjectModel(db.Model):
     project_id = db.Column(db.String(50), primary_key=True)
     project_name = db.Column(db.String(20), unique=True)
     remark = db.Column(db.String(50))
-    is_delete = db.Column(db.Integer, nullable=False)
+    is_delete = db.Column(db.Integer, nullable=False, default=0)
     create_time = db.Column(db.Date, default=datetime.now)
     creator = db.Column(db.String(50), db.ForeignKey('user.user_id'), nullable=False)
 
