@@ -66,14 +66,14 @@ class ProjectM(object):
     def edit_project(self, is_del, pro_id, pro_name, remark):
         pro_info = ProjectModel.query.filter_by(project_id=pro_id).first()
         if pro_info is None:
-            res = Result(msg='Project ID 无效，没有查找到对应的项目').success()
+            res = Result(msg='Project ID 无效，没有查找到对应的项目').fail()
         # 判断是否删除
         elif is_del == 1:
             pro_info.is_delete = 1
             db.session.commit()
             res = Result(msg='项目删除成功').success()
         elif pro_name == '':
-            res = Result(msg='项目名称不能为空').success()
+            res = Result(msg='项目名称不能为空').fail()
         else:
             pro_info.project_name = pro_name
             pro_info.remark = remark

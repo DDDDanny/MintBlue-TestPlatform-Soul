@@ -47,6 +47,9 @@ def project_edit():
     """
     form_data = eval(request.get_data(as_text=True))
     is_delete = form_data['isDel']
-    pro_id, pro_name, remark = form_data['projectID'], form_data['projectName'], form_data['remark']
+    if is_delete == 0:
+        pro_id, pro_name, remark = form_data['projectID'], form_data['projectName'], form_data['remark']
+    else:
+        pro_id, pro_name, remark = form_data['projectID'], None, None
     response = ProjectM().edit_project(is_delete, pro_id, pro_name, remark)
     return response
