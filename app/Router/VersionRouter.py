@@ -45,7 +45,10 @@ def version_edit():
     Desc: 编辑项目信息接口(删除也用这个接口)
     """
     form_data = eval(request.get_data(as_text=True))
-    is_del = form_data['isDel']
-    ver_id, version, remark = form_data['versionID'], form_data['version'], form_data['remark']
-    response = VersionM().edit_version(is_del, ver_id, version, remark)
+    is_delete = form_data['isDel']
+    if is_delete == 0:
+        ver_id, version, remark = form_data['versionID'], form_data['version'], form_data['remark']
+    else:
+        ver_id, version, remark = form_data['versionID'], None, None
+    response = VersionM().edit_version(is_delete, ver_id, version, remark)
     return response
