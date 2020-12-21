@@ -4,6 +4,7 @@
 # @File    : VersionM.py
 # @Describe: 版本管理业务逻辑
 
+import time
 import uuid
 
 from flask import make_response
@@ -23,28 +24,34 @@ class VersionM(object):
     def __create_uuid():
         return str(uuid.uuid4())
 
-    # 序列化版本号信息
+    # 时间转换
     @staticmethod
-    def __ver_info_serializer(ver_item):
+    def __transform_time(timeObj):
+        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
+
+    # 序列化版本号信息
+    def __ver_info_serializer(self, ver_item):
         return {
             'verID': ver_item[0],
             'version': ver_item[1],
             'remark': ver_item[2],
-            'createTime': ver_item[3]
+            'createTime': self.__transform_time(ver_item[3]),
+            'creator': ver_item[4]
         }
 
     # 新增版本号
-    def add_version(self, pro_id, version, remark):
+    def add_version(self, user_id, pro_id, version, remark):
         pro_info = ProjectModel.query.filter_by(project_id=pro_id).first()
         if pro_info is None:
-            res = Result(msg='Project ID 无效，没有查找到对应的项目').success()
+            res = Result(msg='Project ID 无效，没有查找到对应的项目').fail()
         elif version == '':
-            res = Result(msg='版本号不能为空').success()
+            res = Result(msg='版本号不能为空').fail()
         else:
             ver_id = self.__create_uuid()
             version_info = VersionModel(
                 ver_id=ver_id, version=version,
-                remark=remark, pro_id=pro_id
+                remark=remark, pro_id=pro_id,
+                creator=user_id
             )
             db.session.add(version_info)
             db.session.commit()
@@ -54,7 +61,7 @@ class VersionM(object):
     # 版本号列表
     def get_version_list(self):
         # 查询获取对象信息
-        sql = 'select ver_id, version, remark, create_time from version where is_delete=0;'
+        sql = 'select ver_id, version, remark, version.create_time, username from version left join user on user_id=creator where is_delete=0;'
         data_obj = db.session.execute(sql)
         data = [self.__ver_info_serializer(item) for item in data_obj]
         res = Result(data).success()
@@ -64,13 +71,13 @@ class VersionM(object):
     def edit_version(self, is_del, ver_id, version, remark):
         ver_info = VersionModel.query.filter_by(ver_id=ver_id).first()
         if ver_info is None:
-            res = Result(msg='Version ID 无效，没有找到对应的版本').success()
+            res = Result(msg='Version ID 无效，没有找到对应的版本').fail()
         elif is_del == 1:
             ver_info.is_delete = 1
             db.session.commit()
             res = Result(msg='版本号删除成功').success()
         elif version == '':
-            res = Result(msg='版本号不能为空').success()
+            res = Result(msg='版本号不能为空').fail()
         else:
             ver_info.version = version
             ver_info.remark = remark

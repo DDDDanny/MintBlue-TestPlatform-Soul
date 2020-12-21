@@ -27,13 +27,15 @@ def version_list():
 
 
 @VersionBlue.route('/version/add', methods=['POST'])
+@jwt_required
 def version_add():
     """
     Desc: 新增版本信息接口
     """
     form_data = eval(request.get_data(as_text=True))
     pro_id, version, remark = form_data['projectID'], form_data['version'], form_data['remark']
-    response = VersionM().add_version(pro_id, version, remark)
+    user_id = get_jwt_identity() 
+    response = VersionM().add_version(user_id, pro_id, version, remark)
     return response
 
 
