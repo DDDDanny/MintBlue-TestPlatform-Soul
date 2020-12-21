@@ -34,7 +34,8 @@ class UserLogin(object):
             res = Result(msg='用户名或者密码错误').fail()
         else:
             data = data_obj.query_one()
-            access_token = create_access_token(identity=data['userID'])
+            # expires_delta=False 关闭到期时间
+            access_token = create_access_token(identity=data['userID'], expires_delta=False)
             data['access_token'] = access_token
             res = Result(data, '登录成功').success()
         return make_response(res)
