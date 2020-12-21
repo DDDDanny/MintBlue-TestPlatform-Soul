@@ -11,6 +11,7 @@ from factory import db
 from app.Utils.MD5 import md5_encrypt
 from app.Common.Result import Result
 from app.Model.UserModel import UserModel
+from app.Model.ProjectModel import ProjectModel
 
 
 class UserLogin(object):
@@ -37,6 +38,11 @@ class UserLogin(object):
             # expires_delta=False 关闭到期时间
             access_token = create_access_token(identity=data['userID'], expires_delta=False)
             data['access_token'] = access_token
+            pro_obj = ProjectModel.query.filter_by(is_delete=0).first()
+            if pro_obj is None:
+                data['projectID'] = 'NULL'
+            else:
+                data['projectID'] = pro_obj.query_one()['projectID']
             res = Result(data, '登录成功').success()
         return make_response(res)
 
