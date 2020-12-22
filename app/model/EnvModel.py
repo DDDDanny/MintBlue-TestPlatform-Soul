@@ -19,3 +19,4 @@ class EnvModel(db.Model):
     create_time = db.Column(db.Date, default=datetime.now)
     is_delete = db.Column(db.Integer, nullable=False, default=0)
     pro_id = db.Column(db.String(50), db.ForeignKey('project.project_id'), nullable=False)
+    creator = db.Column(db.String(50), db.ForeignKey('user.user_id'), nullable=False)

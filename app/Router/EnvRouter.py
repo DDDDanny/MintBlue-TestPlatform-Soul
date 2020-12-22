@@ -18,6 +18,7 @@ EnvBlue = Blueprint('EnvBlue', __name__)
 
 
 @EnvBlue.route('/env/list', methods=['GET'])
+@jwt_required
 def env_list():
     """
     Desc: 环境参数信息列表接口
@@ -27,13 +28,15 @@ def env_list():
 
 
 @EnvBlue.route('/env/add', methods=['POST'])
+@jwt_required
 def env_add():
     """
     Desc: 新增环境信息接口
     """
     form_data = eval(request.get_data(as_text=True))
     pro_id, env_name, base_url = form_data['projectID'], form_data['envName'], form_data['baseURL']
-    response = EnvM().add_env(pro_id, env_name, base_url)
+    user_id = get_jwt_identity()
+    response = EnvM().add_env(user_id, pro_id, env_name, base_url)
     return response
 
 
