@@ -47,8 +47,8 @@ def env_edit():
     Desc: 编辑环境信息接口(删除也用这个接口)
     """
     form_data = eval(request.get_data(as_text=True))
-    is_del = form_data['isDel']
-    if is_del == 0:
+    is_delete = form_data['isDel']
+    if is_delete == 0:
         env_id, env_name, base_url = form_data['envID'], form_data['envName'], form_data['baseURL']
     else:
         env_id, env_name, base_url = form_data['envID'], None, None

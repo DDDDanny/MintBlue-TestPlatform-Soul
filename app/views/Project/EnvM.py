@@ -49,8 +49,10 @@ class EnvM(object):
         else:
             env_id = self.__create_uuid()
             env_info = EnvModel(
-                env_id=env_id, env_name=env_name,
-                base_url=base_url, pro_id=pro_id,
+                env_id=env_id, 
+                env_name=env_name,
+                base_url=base_url, 
+                pro_id=pro_id,
                 creator=user_id
             )
             db.session.add(env_info)
