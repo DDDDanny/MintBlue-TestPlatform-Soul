@@ -49,8 +49,10 @@ class VersionM(object):
         else:
             ver_id = self.__create_uuid()
             version_info = VersionModel(
-                ver_id=ver_id, version=version,
-                remark=remark, pro_id=pro_id,
+                ver_id=ver_id, 
+                version=version, 
+                remark=remark, 
+                pro_id=pro_id, 
                 creator=user_id
             )
             db.session.add(version_info)
@@ -61,7 +63,10 @@ class VersionM(object):
     # 版本号列表
     def get_version_list(self):
         # 查询获取对象信息
-        sql = 'select ver_id, version, remark, version.create_time, username from version left join user on user_id=creator where is_delete=0;'
+        sql = ''' select ver_id, version, remark, version.create_time, username from version 
+                left join user on user_id=creator 
+                where is_delete=0 
+                order by version.create_time desc; '''
         data_obj = db.session.execute(sql)
         data = [self.__ver_info_serializer(item) for item in data_obj]
         res = Result(data).success()

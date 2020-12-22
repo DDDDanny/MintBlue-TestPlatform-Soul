@@ -45,8 +45,10 @@ class ProjectM(object):
         else:
             pro_id = self.__create_uuid()
             pro_info = ProjectModel(
-                project_id=pro_id, project_name=pro_name,
-                remark=remark, creator=user_id
+                project_id=pro_id, 
+                project_name=pro_name,
+                remark=remark, 
+                creator=user_id
             )
             db.session.add(pro_info)
             db.session.commit()
@@ -56,7 +58,10 @@ class ProjectM(object):
     # 获取项目列表
     def get_project_list(self):
         # 查询获取对象信息
-        sql = 'select project_id, project_name, remark, username, project.create_time from project left join user on project.creator=user.user_id where is_delete=0;'
+        sql = ''' select project_id, project_name, remark, username, project.create_time from project 
+                left join user on project.creator=user.user_id 
+                where is_delete=0 
+                order by project.create_time desc; '''
         data_Obj = db.session.execute(sql)
         data = [self.__pro_info_serializer(item) for item in data_Obj]
         res = Result(data).success()

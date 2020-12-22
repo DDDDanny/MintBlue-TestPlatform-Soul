@@ -36,8 +36,10 @@ class TestSuite(object):
 
     # 测试用例集列表
     def get_suite_list(self, pro_id):
-        sql = 'select suite_id, suite_name, remark, username, pro_id, update_time from suite ' \
-              'left join user on creator=user_id where is_delete = 0 and pro_id = "{}"'.format(pro_id)
+        sql = ''' select suite_id, suite_name, remark, username, pro_id, update_time from suite 
+                left join user on creator=user_id 
+                where is_delete = 0 and pro_id = "{}" 
+                order by suite.create_time desc; '''.format(pro_id)
         data_obj = db.session.execute(sql)
         data = [self.__suite_info_serializer(item) for item in data_obj]
         res = Result(data).success()
@@ -50,8 +52,10 @@ class TestSuite(object):
         else:
             suite_id = self.__create_uuid()
             suite_info = SuiteModel(
-                suite_id=suite_id, suite_name=suite_name,
-                remark=remark, creator=user_id,
+                suite_id=suite_id, 
+                suite_name=suite_name,
+                remark=remark,
+                creator=user_id,
                 pro_id=pro_id
             )
             db.session.add(suite_info)
