@@ -32,7 +32,7 @@ class EnvM(object):
     # 序列化环境信息
     def __env_info_serializer(self, env_item):
         return {
-            'envId': env_item[0],
+            'envID': env_item[0],
             'envName': env_item[1],
             'baseURL': env_item[2],
             'createTime': self.__transform_time(env_item[3]),
