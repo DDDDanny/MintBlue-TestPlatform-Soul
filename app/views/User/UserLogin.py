@@ -43,6 +43,7 @@ class UserLogin(object):
                 data['projectID'] = 'NULL'
             else:
                 data['projectID'] = pro_obj.query_one()['projectID']
+                data['projectName'] = pro_obj.query_one()['projectName']
             res = Result(data, '登录成功').success()
         return make_response(res)
 
