@@ -27,6 +27,7 @@ def suite_list():
     response = TestSuite().get_suite_list(pro_id)
     return response
 
+
 @SuiteBlue.route('/suite/add', methods=['POST'])
 @jwt_required
 def suite_add():
