@@ -4,6 +4,7 @@
 # @File    : TestTask.py
 # @Describe: 测试任务相关业务逻辑
 
+import time
 import uuid
  
 from flask import make_response
@@ -15,25 +16,30 @@ from app.Model.TaskModel import TaskModel
  
 class TestTask(object):
     def __init__(self):
-        pass
+        self.status_dict = {0: '未开始', 1: '进行中', 2: '已完成'}
     
     # 生成UUID
     @staticmethod
     def __create_uuid():
         return str(uuid.uuid4())
+    
+    # 时间转换
+    @staticmethod
+    def __transform_time(timeObj):
+        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
 
     # 序列化测试任务信息
     def __task_info_serializer(self, task_item):
         return {
             'taskID': task_item[0],
             'taskName': task_item[1],
-            'createTime': task_item[2],
-            'taskStartTime': task_item[3],
-            'taskEndTime': task_item[4],
-            'taskStatus': task_item[5],
-            'username': task_item[6],
+            'createTime': self.__transform_time(task_item[2]),
+            'startTime': self.__transform_time(task_item[3]),
+            'endTime': self.__transform_time(task_item[4]),
+            'taskStatus': self.status_dict[task_item[5]],
+            'creator': task_item[6],
             'version': task_item[7],
-            'suiteName': task_item[8]
+            'caseSuite': task_item[8]
         }
 
     # 测试任务列表
