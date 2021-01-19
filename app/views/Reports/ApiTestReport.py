@@ -32,9 +32,9 @@ class ApiTestReport(object):
     def __api_test_report_serializer(self, report_item):
         return {
             'reportID': report_item[0],
-            'reprotName': report_item[1],
-            'success': report_item[2],
-            'fail': report_item[3],
+            'reportName': report_item[1],
+            'successNum': report_item[2],
+            'failNum': report_item[3],
             'createTime': self.__transform_time(report_item[4]),
             'proID': report_item[5],
             'taskID': report_item[6],
