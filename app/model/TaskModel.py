@@ -18,11 +18,9 @@ class TaskModel(db.Model):
     create_time = db.Column(db.Date, default=datetime.now)
     task_start_time = db.Column(db.Date) 
     task_end_time = db.Column(db.Date)
-    task_status = db.Column(db.Integerm, nullable=False, default=0)
+    task_status = db.Column(db.Integer, nullable=False, default=0)
     creator = db.Column(db.String(50), db.ForeignKey('user.user_id'), nullable=False)
     pro_id = db.Column(db.String(50), db.ForeignKey('project.project_id'), nullable=False)
     env_id = db.Column(db.String(50), db.ForeignKey('env.env_id'), nullable=False)
     suite_id = db.Column(db.String(50), db.ForeignKey('suite.suite_id'), nullable=False)
     ver_id = db.Column(db.String(50), db.ForeignKey('version.ver_id'), nullable=False)
-    
-    
