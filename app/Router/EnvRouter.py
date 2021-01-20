@@ -52,5 +52,5 @@ def env_edit():
         env_id, env_name, base_url = form_data['envID'], form_data['envName'], form_data['baseURL']
     else:
         env_id, env_name, base_url = form_data['envID'], None, None
-    response = EnvM().edit_env(is_del, env_id, env_name, base_url)
+    response = EnvM().edit_env(is_delete, env_id, env_name, base_url)
     return response
