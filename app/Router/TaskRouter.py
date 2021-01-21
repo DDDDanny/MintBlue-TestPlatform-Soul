@@ -17,6 +17,7 @@ TaskBlue = Blueprint('TaskBlue', __name__)
 
 
 @TaskBlue.route('/task/list', methods=['GET'])
+@jwt_required
 def task_list():
     """
     Desc: 测试任务获取列表接口

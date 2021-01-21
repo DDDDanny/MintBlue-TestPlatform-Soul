@@ -17,6 +17,7 @@ ApiTestReportBlue = Blueprint('ApiTestReportBlue', __name__)
 
 
 @ApiTestReportBlue.route('/apiReport/list', methods=['GET'])
+@jwt_required
 def api_test_report():
     """
     Desc: 获取Api测试报告列表接口
