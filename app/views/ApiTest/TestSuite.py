@@ -4,6 +4,7 @@
 # @File    : TestSuite.py
 # @Describe: 测试用例集业务逻辑
 
+import time
 import uuid
 
 from flask import make_response
@@ -22,16 +23,20 @@ class TestSuite(object):
     def __create_uuid():
         return str(uuid.uuid4())
 
-    # 序列化测试集信息
+    # 时间转换
     @staticmethod
-    def __suite_info_serializer(suite_item):
+    def __transform_time(timeObj):
+        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
+    
+    # 序列化测试集信息
+    def __suite_info_serializer(self, suite_item):
         return {
             'suiteID': suite_item[0],
             'suiteName': suite_item[1],
             'remark': suite_item[2],
             'creator': suite_item[3],
             'proID': suite_item[4],
-            'updateTime': suite_item[5]
+            'updateTime': self.__transform_time(suite_item[5])
         }
 
     # 测试用例集列表
