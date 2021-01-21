@@ -13,6 +13,7 @@ from factory import db
 from app.Common.Result import Result
 from app.Model.VersionModel import VersionModel
 from app.Model.ProjectModel import ProjectModel
+from app.Utils.TransformTime import transform_time
 
 
 class VersionM(object):
@@ -24,18 +25,13 @@ class VersionM(object):
     def __create_uuid():
         return str(uuid.uuid4())
 
-    # 时间转换
-    @staticmethod
-    def __transform_time(timeObj):
-        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
-
     # 序列化版本号信息
     def __ver_info_serializer(self, ver_item):
         return {
             'verID': ver_item[0],
             'version': ver_item[1],
             'remark': ver_item[2],
-            'createTime': self.__transform_time(ver_item[3]),
+            'createTime': transform_time(ver_item[3]),
             'creator': ver_item[4]
         }
 

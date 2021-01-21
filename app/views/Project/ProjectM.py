@@ -12,6 +12,7 @@ from flask import make_response
 from factory import db
 from app.Common.Result import Result
 from app.Model.ProjectModel import ProjectModel
+from app.Utils.TransformTime import transform_time
 
 
 class ProjectM(object):
@@ -22,11 +23,6 @@ class ProjectM(object):
     @staticmethod
     def __create_uuid():
         return str(uuid.uuid4())
-    
-    # 时间转换
-    @staticmethod
-    def __transform_time(timeObj):
-        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
 
     # 序列化项目信息
     def __pro_info_serializer(self, pro_item):
@@ -35,7 +31,7 @@ class ProjectM(object):
             'projectName': pro_item[1],
             'remark': pro_item[2],
             'creator': pro_item[3],
-            'createTime': self.__transform_time(pro_item[4]) 
+            'createTime': transform_time(pro_item[4]) 
         }
 
     # 新增项目

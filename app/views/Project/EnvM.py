@@ -13,6 +13,7 @@ from factory import db
 from app.Common.Result import Result
 from app.Model.EnvModel import EnvModel
 from app.Model.ProjectModel import ProjectModel
+from app.Utils.TransformTime import transform_time
 
 
 class EnvM(object):
@@ -24,18 +25,13 @@ class EnvM(object):
     def __create_uuid():
         return str(uuid.uuid4())
     
-    # 时间转换
-    @staticmethod
-    def __transform_time(timeObj):
-        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
-    
     # 序列化环境信息
     def __env_info_serializer(self, env_item):
         return {
             'envID': env_item[0],
             'envName': env_item[1],
             'baseURL': env_item[2],
-            'createTime': self.__transform_time(env_item[3]),
+            'createTime': transform_time(env_item[3]),
             'creator': env_item[4]
         }
     

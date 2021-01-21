@@ -12,6 +12,7 @@ from flask import make_response
 from factory import db
 from app.Common.Result import Result
 from app.Model.SuiteModel import SuiteModel
+from app.Utils.TransformTime import transform_time
 
 
 class TestSuite(object):
@@ -22,11 +23,6 @@ class TestSuite(object):
     @staticmethod
     def __create_uuid():
         return str(uuid.uuid4())
-
-    # 时间转换
-    @staticmethod
-    def __transform_time(timeObj):
-        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
     
     # 序列化测试集信息
     def __suite_info_serializer(self, suite_item):
@@ -36,7 +32,7 @@ class TestSuite(object):
             'remark': suite_item[2],
             'creator': suite_item[3],
             'proID': suite_item[4],
-            'updateTime': self.__transform_time(suite_item[5])
+            'updateTime': transform_time(suite_item[5])
         }
 
     # 测试用例集列表

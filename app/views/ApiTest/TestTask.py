@@ -12,6 +12,7 @@ from flask import make_response
 from factory import db
 from app.Common.Result import Result
 from app.Model.TaskModel import TaskModel
+from app.Utils.TransformTime import transform_time
  
  
 class TestTask(object):
@@ -22,20 +23,15 @@ class TestTask(object):
     @staticmethod
     def __create_uuid():
         return str(uuid.uuid4())
-    
-    # 时间转换
-    @staticmethod
-    def __transform_time(timeObj):
-        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
 
     # 序列化测试任务信息
     def __task_info_serializer(self, task_item):
         return {
             'taskID': task_item[0],
             'taskName': task_item[1],
-            'createTime': self.__transform_time(task_item[2]),
-            'startTime': self.__transform_time(task_item[3]),
-            'endTime': self.__transform_time(task_item[4]),
+            'createTime': transform_time(task_item[2]),
+            'startTime': transform_time(task_item[3]),
+            'endTime': transform_time(task_item[4]),
             'taskStatus': self.status_dict[task_item[5]],
             'creator': task_item[6],
             'version': task_item[7],

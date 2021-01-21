@@ -12,6 +12,7 @@ from flask import make_response
 from factory import db
 from app.Common.Result import Result
 from app.Model.ApiTestReportModel import ApiTestReportModel
+from app.Utils.TransformTime import transform_time
 
 
 class ApiTestReport(object):
@@ -22,11 +23,6 @@ class ApiTestReport(object):
     @staticmethod
     def __create_uuid():
         return str(uuid.uuid4())
-    
-    # 时间转换
-    @staticmethod
-    def __transform_time(timeObj):
-        return time.strftime("%Y-%m-%d %H:%M:%S", timeObj.timetuple())
 
     # 序列化测试任务信息
     def __api_test_report_serializer(self, report_item):
@@ -35,7 +31,7 @@ class ApiTestReport(object):
             'reportName': report_item[1],
             'successNum': report_item[2],
             'failNum': report_item[3],
-            'createTime': self.__transform_time(report_item[4]),
+            'createTime': transform_time(report_item[4]),
             'proID': report_item[5],
             'taskID': report_item[6],
             'version': report_item[7]
