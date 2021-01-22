@@ -22,7 +22,8 @@ def version_list():
     """
     Desc: 版本信息列表接口
     """
-    response = VersionM().get_version_list()
+    pro_id = request.args.get('proID')
+    response = VersionM().get_version_list(pro_id)
     return response
 
 

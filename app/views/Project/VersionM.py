@@ -57,12 +57,12 @@ class VersionM(object):
         return make_response(res)
 
     # 版本号列表
-    def get_version_list(self):
+    def get_version_list(self, pro_id):
         # 查询获取对象信息
         sql = ''' select ver_id, version, remark, version.create_time, username from version 
                 left join user on user_id=creator 
-                where is_delete=0 
-                order by version.create_time desc; '''
+                where is_delete=0 and pro_id="{}"
+                order by version.create_time desc; '''.format(pro_id)
         data_obj = db.session.execute(sql)
         data = [self.__ver_info_serializer(item) for item in data_obj]
         res = Result(data).success()
