@@ -23,7 +23,8 @@ def env_list():
     """
     Desc: 环境参数信息列表接口
     """
-    response = EnvM().get_env_list()
+    pro_id = request.args.get('proID')
+    response = EnvM().get_env_list(pro_id)
     return response
 
 

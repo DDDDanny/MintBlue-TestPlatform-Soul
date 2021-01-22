@@ -57,11 +57,11 @@ class EnvM(object):
         return make_response(res)
     
     # 环境信息列表
-    def get_env_list(self):
+    def get_env_list(self, pro_id):
         sql = ''' select env_id, env_name, base_url, env.create_time, username from env 
                 left join user on user_id=creator 
-                where is_delete=0 
-                order by env.create_time desc; '''
+                where is_delete=0 and env.pro_id="{}"
+                order by env.create_time desc; '''.format(pro_id)
         data_obj = db.session.execute(sql)
         data = [self.__env_info_serializer(item) for item in data_obj]
         res = Result(data).success()
