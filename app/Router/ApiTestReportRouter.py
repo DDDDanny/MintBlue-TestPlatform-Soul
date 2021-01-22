@@ -22,5 +22,6 @@ def api_test_report():
     """
     Desc: 获取Api测试报告列表接口
     """
-    response = ApiTestReport().get_api_test_report_list()
+    pro_id = request.args.get('proID')
+    response = ApiTestReport().get_api_test_report_list(pro_id)
     return response
