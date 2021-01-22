@@ -22,5 +22,6 @@ def task_list():
     """
     Desc: 测试任务获取列表接口
     """
-    response = TestTask().get_task_list()
+    pro_id = request.args.get('proID')
+    response = TestTask().get_task_list(pro_id)
     return response

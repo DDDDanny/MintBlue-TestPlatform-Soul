@@ -39,12 +39,13 @@ class TestTask(object):
         }
 
     # 测试任务列表
-    def get_task_list(self):
+    def get_task_list(self, pro_id):
         sql = ''' select task_id, task_name, task.create_time, task_start_time,
                 task_end_time, task_status, username, version, suite_name from
                 task left join user on creator = user_id left join version on 
                 task.ver_id = version.ver_id left join suite on 
-                task.suite_id = suite.suite_id '''
+                task.suite_id = suite.suite_id where task.pro_id="{}"
+                order by task.create_time desc; '''.format(pro_id)
         data_obj = db.session.execute(sql)
         data = [self.__task_info_serializer(item) for item in data_obj]
         res = Result(data).success()
