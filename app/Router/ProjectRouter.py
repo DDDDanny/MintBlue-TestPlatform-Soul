@@ -46,10 +46,10 @@ def project_edit():
     Desc: 编辑项目接口、删除项目（逻辑删除）也用这个接口
     """
     form_data = eval(request.get_data(as_text=True))
-    is_delete = form_data['isDel']
+    is_delete, pro_id = form_data['isDel'], form_data['projectID']
     if is_delete == 0:
-        pro_id, pro_name, remark = form_data['projectID'], form_data['projectName'], form_data['remark']
+        pro_name, remark = form_data['projectName'], form_data['remark']
     else:
-        pro_id, pro_name, remark = form_data['projectID'], None, None
+        pro_name, remark = None, None
     response = ProjectM().edit_project(is_delete, pro_id, pro_name, remark)
     return response
