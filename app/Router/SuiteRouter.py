@@ -49,9 +49,11 @@ def suite_edit():
     """
     try:
         form_data = eval(request.get_data(as_text=True))
-        suite_id = form_data['suiteID']
-        suite_name, remark = form_data['suiteName'], form_data['remark']
-        is_delete = form_data['isDel']
+        is_delete, suite_id = form_data['isDel'], form_data['suiteID']
+        if is_delete == 0:
+            suite_name, remark = form_data['suiteName'], form_data['remark']
+        else:
+            suite_name, remark = None, None
         response = TestSuite().edit_suite(suite_id, suite_name, remark, is_delete)
         return response
     except Exception as err:
