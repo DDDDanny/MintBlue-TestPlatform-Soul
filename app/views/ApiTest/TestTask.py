@@ -74,3 +74,14 @@ class TestTask(object):
             db.session.close()
             res = Result(msg='新增测试任务成功').success()
         return make_response(res)
+
+    # 删除任务信息
+    def del_task_info(self, task_id):
+        task_info = TaskModel.query.filter_by(task_id=task_id).first()
+        if task_info is None:
+            res = Result(msg='taskID无效，没有查找到对应的任务信息').success()
+        else:
+            db.session.delete(task_info)
+            db.session.commit()
+            res = Result(msg='删除测试任务成功').success()
+        return make_response(res)

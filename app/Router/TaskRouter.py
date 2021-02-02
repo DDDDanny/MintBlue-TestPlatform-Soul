@@ -39,3 +39,15 @@ def add_task():
     user_id = get_jwt_identity()
     response = TestTask().add_task_info(task_name, suite_id, ver_id, env_id, start_time, pro_id, user_id)
     return response
+
+
+@TaskBlue.route('/task/del', methods=['POST'])
+@jwt_required
+def del_task():
+    """
+    Desc: 删除测试任务接口
+    """
+    form_data = eval(request.get_data(as_text=True))
+    task_id = form_data['taskID']
+    response = TestTask().del_task_info(task_id)
+    return response
