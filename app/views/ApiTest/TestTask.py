@@ -12,7 +12,7 @@ from flask import make_response
 from factory import db
 from app.Common.Result import Result
 from app.Model.TaskModel import TaskModel
-from app.Utils.TransformTime import transform_time
+from app.Utils.TransformTime import transform_time, time_stamp_transform
  
  
 class TestTask(object):
@@ -30,8 +30,8 @@ class TestTask(object):
             'taskID': task_item[0],
             'taskName': task_item[1],
             'createTime': transform_time(task_item[2]),
-            'startTime': transform_time(task_item[3]),
-            'endTime': transform_time(task_item[4]),
+            'startTime': time_stamp_transform(task_item[3]),
+            'endTime': time_stamp_transform(task_item[4]),
             'taskStatus': self.status_dict[task_item[5]],
             'creator': task_item[6],
             'version': task_item[7],
@@ -49,4 +49,28 @@ class TestTask(object):
         data_obj = db.session.execute(sql)
         data = [self.__task_info_serializer(item) for item in data_obj]
         res = Result(data).success()
+        return make_response(res)
+
+    # 新增任务信息
+    def add_task_info(self, task_name, suite_id, ver_id, env_id, start_time, pro_id, user_id):
+        if task_name == '':
+            res = Result(msg='任务名称不能为空').success()
+        else:
+            task_id = self.__create_uuid()
+            task_info = TaskModel(
+                task_id=task_id,
+                task_name=task_name,
+                suite_id=suite_id,
+                ver_id=ver_id,
+                env_id=env_id,
+                pro_id=pro_id,
+                creator=user_id,
+                task_status=0,
+                task_start_time=start_time,
+                task_end_time=start_time
+            )
+            db.session.add(task_info)
+            db.session.commit()
+            db.session.close()
+            res = Result(msg='新增测试任务成功').success()
         return make_response(res)
