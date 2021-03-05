@@ -4,6 +4,8 @@
 # @File    : TestCaseModel.py
 # @Describe: 测试用例Model
 
+from datetime import datetime
+
 from factory import db
 
 
