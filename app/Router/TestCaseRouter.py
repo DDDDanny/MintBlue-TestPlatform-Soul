@@ -10,6 +10,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from app.Common.Result import Result
 from app.Model.TestCaseModel import TestCaseModel
+from app.Views.ApiTest.TestCase import TestCase
 
 
 # 声明蓝图
@@ -21,7 +22,9 @@ def testcase_list():
     """
     Desc: 获取测试用例列表接口
     """
-    pass
+    pro_id = request.args.get('proID')
+    response = TestCase().get_case_list(pro_id)
+    return response
 
 
 @TestCaseBlue.route('/testcase/add', methods=['POST'])
