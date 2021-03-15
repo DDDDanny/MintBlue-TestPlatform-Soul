@@ -12,6 +12,7 @@ from flask import make_response
 from factory import db
 from app.Common.Result import Result
 from app.Model.ProjectModel import ProjectModel
+from app.Model.UserModel import UserModel
 from app.Utils.TransformTime import transform_time
 
 
@@ -30,8 +31,8 @@ class ProjectM(object):
             'projectID': pro_item[0],
             'projectName': pro_item[1],
             'remark': pro_item[2],
-            'creator': pro_item[3],
-            'createTime': transform_time(pro_item[4]) 
+            'createTime': transform_time(pro_item[3]) 
+            'creator': pro_item[4],
         }
 
     # 新增项目
@@ -53,13 +54,11 @@ class ProjectM(object):
 
     # 获取项目列表
     def get_project_list(self):
-        # 查询获取对象信息
-        sql = ''' select project_id, project_name, remark, username, project.create_time from project 
-                left join user on project.creator=user.user_id 
-                where is_delete=0 
-                order by project.create_time desc; '''
-        data_Obj = db.session.execute(sql)
-        data = [self.__pro_info_serializer(item) for item in data_Obj]
+        data_obj = db.session.query(
+            ProjectModel.project_id, ProjectModel.project_name, ProjectModel.remark, 
+            ProjectModel.create_time, UserModel.username
+        ).filter(ProjectModel.is_delete == 0).join(UserModel, ProjectModel.creator == UserModel.user_id)
+        data = [self.__pro_info_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
 
