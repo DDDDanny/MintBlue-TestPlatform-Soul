@@ -16,7 +16,7 @@ class TestCaseModel(db.Model):
     case_name = db.Column(db.String(20), nullable=False)
     level = db.Column(db.Integer, nullable=False, default=0)
     method = db.Column(db.Integer, nullable=False, default=0)
-    url = db.Column(db.String(200), nullable=False, default=None)
+    req_url = db.Column(db.String(200), nullable=False, default=None)
     header = db.Column(db.String(100), nullable=False, default=None)
     body = db.Column(db.Text(500), nullable=True)
     case_assert = db.Column(db.Text(500), nullable=False, default=None)
