@@ -31,8 +31,8 @@ class ProjectM(object):
             'projectID': pro_item[0],
             'projectName': pro_item[1],
             'remark': pro_item[2],
-            'createTime': transform_time(pro_item[3]) 
-            'creator': pro_item[4],
+            'createTime': transform_time(pro_item[3]),
+            'creator': pro_item[4]
         }
 
     # 新增项目
@@ -54,10 +54,13 @@ class ProjectM(object):
 
     # 获取项目列表
     def get_project_list(self):
-        data_obj = db.session.query(
+        # 获取数据对象
+        project_obj = db.session.query(
             ProjectModel.project_id, ProjectModel.project_name, ProjectModel.remark, 
             ProjectModel.create_time, UserModel.username
-        ).filter(ProjectModel.is_delete == 0).join(UserModel, ProjectModel.creator == UserModel.user_id)
+        ).join(UserModel, ProjectModel.creator == UserModel.user_id)
+        # 数据对象进行筛选和排序
+        data_obj = project_obj.filter(ProjectModel.is_delete == 0).order_by(ProjectModel.create_time.desc())
         data = [self.__pro_info_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
