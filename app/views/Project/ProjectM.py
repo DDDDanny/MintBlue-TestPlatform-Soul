@@ -42,7 +42,7 @@ class ProjectM(object):
             res = Result(msg='项目名称不能为空').success()
         else:
             pro_id = self.__create_uuid()
-            pro_info = ProjectModel(
+            pro_info = PM(
                 project_id=pro_id, 
                 project_name=pro_name,
                 remark=remark, 
@@ -67,7 +67,7 @@ class ProjectM(object):
 
     # 编辑项目
     def edit_project(self, is_del, pro_id, pro_name, remark):
-        pro_info = ProjectModel.query.filter_by(project_id=pro_id).first()
+        pro_info = PM.query.filter_by(project_id=pro_id).first()
         if pro_info is None:
             res = Result(msg='Project ID 无效，没有查找到对应的项目').fail()
         # 判断是否删除
