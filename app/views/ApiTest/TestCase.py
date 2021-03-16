@@ -11,7 +11,8 @@ from flask import make_response
 
 from factory import db
 from app.Common.Result import Result
-from app.Model.TestCaseModel import TestCaseModel
+from app.Model.TestCaseModel import TestCaseModel as TCM
+from app.Model.UserModel import UserModel
 from app.Utils.TransformTime import transform_time
 
 
@@ -25,7 +26,8 @@ class TestCase(object):
         return str(uuid.uuid4())
 
     # 序列化测试集信息
-    def __case_info_serializer(self, case_item):
+    @staticmethod
+    def __case_info_serializer(case_item):
         return {
             'caseID': case_item[0],
             'caseName': case_item[1],
@@ -39,11 +41,13 @@ class TestCase(object):
 
     # 测试用例列表
     def get_case_list(self, pro_id):
-        sql = ''' select case_id, case_name, level, method, req_url, remark, 
-                testcase.create_time, username from testcase 
-                left join user on creator=user_id where pro_id = "{}" 
-                order by testcase.create_time desc; '''.format(pro_id)
-        data_obj = db.session.execute(sql)
+        # 获取数据对象
+        case_obj = db.session.query(
+            TCM.case_id, TCM.case_name, TCM.level, TCM.method, TCM.req_url, TCM.remark,
+            TCM.create_time, UserModel.username
+        ).join(UserModel, UserModel.user_id == TCM.creator)
+        # 数据对象进行筛选和排序
+        data_obj = case_obj.filter(TCM.pro_id == pro_id).order_by(TCM.create_time.desc())
         data = [self.__case_info_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
