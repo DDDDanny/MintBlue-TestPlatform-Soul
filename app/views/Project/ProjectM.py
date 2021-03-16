@@ -11,7 +11,7 @@ from flask import make_response
 
 from factory import db
 from app.Common.Result import Result
-from app.Model.ProjectModel import ProjectModel
+from app.Model.ProjectModel import ProjectModel as PM
 from app.Model.UserModel import UserModel
 from app.Utils.TransformTime import transform_time
 
@@ -57,11 +57,10 @@ class ProjectM(object):
     def get_project_list(self):
         # 获取数据对象
         project_obj = db.session.query(
-            ProjectModel.project_id, ProjectModel.project_name, ProjectModel.remark, 
-            ProjectModel.create_time, UserModel.username
-        ).join(UserModel, ProjectModel.creator == UserModel.user_id)
+            PM.project_id, PM.project_name, PM.remark, PM.create_time, UserModel.username
+        ).join(UserModel, PM.creator == UserModel.user_id)
         # 数据对象进行筛选和排序
-        data_obj = project_obj.filter(ProjectModel.is_delete == 0).order_by(ProjectModel.create_time.desc())
+        data_obj = project_obj.filter(PM.is_delete == 0).order_by(PM.create_time.desc())
         data = [self.__pro_info_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
