@@ -11,7 +11,8 @@ from flask import make_response
 
 from factory import db
 from app.Common.Result import Result
-from app.Model.VersionModel import VersionModel
+from app.Model.UserModel import UserModel
+from app.Model.VersionModel import VersionModel as VM
 from app.Model.ProjectModel import ProjectModel
 from app.Utils.TransformTime import transform_time
 
@@ -44,7 +45,7 @@ class VersionM(object):
             res = Result(msg='版本号不能为空').fail()
         else:
             ver_id = self.__create_uuid()
-            version_info = VersionModel(
+            version_info = VM(
                 ver_id=ver_id, 
                 version=version, 
                 remark=remark, 
@@ -58,19 +59,19 @@ class VersionM(object):
 
     # 版本号列表
     def get_version_list(self, pro_id):
-        # 查询获取对象信息
-        sql = ''' select ver_id, version, remark, version.create_time, username from version 
-                left join user on user_id=creator 
-                where is_delete=0 and pro_id="{}"
-                order by version.create_time desc; '''.format(pro_id)
-        data_obj = db.session.execute(sql)
+        # 获取数据对象
+        version_obj = db.session.query(
+            VM.ver_id, VM.version, VM.remark, VM.create_time, UserModel.username
+        ).join(UserModel, UserModel.user_id == VM.creator)
+        # 数据对象进行筛选和排序
+        data_obj = version_obj.filter(VM.is_delete == 0).filter(VM.pro_id == pro_id).order_by(VM.create_time.desc())
         data = [self.__ver_info_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
 
     # 编辑版本号
     def edit_version(self, is_del, ver_id, version, remark):
-        ver_info = VersionModel.query.filter_by(ver_id=ver_id).first()
+        ver_info = VM.query.filter_by(ver_id=ver_id).first()
         if ver_info is None:
             res = Result(msg='Version ID 无效，没有找到对应的版本').fail()
         elif is_del == 1:
