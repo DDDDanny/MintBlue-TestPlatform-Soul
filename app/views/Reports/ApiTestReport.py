@@ -11,7 +11,9 @@ from flask import make_response
 
 from factory import db
 from app.Common.Result import Result
-from app.Model.ApiTestReportModel import ApiTestReportModel
+from app.Model.VersionModel import VersionModel
+from app.Model.TaskModel import TaskModel
+from app.Model.ApiTestReportModel import ApiTestReportModel as ARM
 from app.Utils.TransformTime import transform_time
 
 
@@ -39,12 +41,17 @@ class ApiTestReport(object):
     
     # 接口测试报告列表
     def get_api_test_report_list(self, pro_id):
-        sql = ''' select report_id, report_name, success, fail, api_report.create_time,
-                api_report.pro_id, api_report.task_id, version from api_report 
-                left join task on api_report.task_id = task.task_id
-                left join version on task.ver_id = version.ver_id 
-                where api_report.pro_id="{}" '''.format(pro_id)
-        data_obj = db.session.execute(sql)
+        # 获取数据对象
+        report_obj = db.session.query(
+            ARM.report_id, ARM.report_name, ARM.success, ARM.fail, ARM.create_time,
+            ARM.pro_id, ARM.task_id, VersionModel.version
+        ).join(
+            TaskModel, TaskModel.task_id == ARM.task_id
+        ).join(
+            VersionModel, VersionModel.ver_id == TaskModel.ver_id
+        )
+        # 数据对象进行筛选和排序
+        data_obj = report_obj.filter(ARM.pro_id == pro_id).order_by(ARM.create_time.desc())
         data = [self.__api_test_report_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
