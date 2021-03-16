@@ -11,8 +11,9 @@ from flask import make_response
 
 from factory import db
 from app.Common.Result import Result
-from app.Model.EnvModel import EnvModel
+from app.Model.EnvModel import EnvModel as EM
 from app.Model.ProjectModel import ProjectModel
+from app.Model.UserModel import UserModel
 from app.Utils.TransformTime import transform_time
 
 
@@ -44,7 +45,7 @@ class EnvM(object):
             res = Result(msg='环境名称或基础地址不能为空').success()
         else:
             env_id = self.__create_uuid()
-            env_info = EnvModel(
+            env_info = EM(
                 env_id=env_id, 
                 env_name=env_name,
                 base_url=base_url, 
@@ -58,18 +59,19 @@ class EnvM(object):
     
     # 环境信息列表
     def get_env_list(self, pro_id):
-        sql = ''' select env_id, env_name, base_url, env.create_time, username from env 
-                left join user on user_id=creator 
-                where is_delete=0 and env.pro_id="{}"
-                order by env.create_time desc; '''.format(pro_id)
-        data_obj = db.session.execute(sql)
+        # 获取数据对象
+        env_obj = db.session.query(
+            EM.env_id, EM.env_name, EM.base_url, EM.create_time, UserModel.username
+        ).join(UserModel, UserModel.user_id == EM.creator)
+        # 数据对象进行筛选和排序
+        data_obj = env_obj.filter(EM.pro_id == pro_id).filter(EM.is_delete == 0).order_by(EM.create_time.desc())
         data = [self.__env_info_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
     
     # 编辑环境信息
     def edit_env(self, is_del, env_id, env_name, base_url):
-        env_info = EnvModel.query.filter_by(env_id=env_id).first()
+        env_info = EM.query.filter_by(env_id=env_id).first()
         if env_info is None:
             res = Result(msg='Env ID 无效，没有找到对应的版本').success()
         elif is_del == 1:
