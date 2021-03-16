@@ -11,7 +11,8 @@ from flask import make_response
 
 from factory import db
 from app.Common.Result import Result
-from app.Model.SuiteModel import SuiteModel
+from app.Model.UserModel import UserModel
+from app.Model.SuiteModel import SuiteModel as SM
 from app.Utils.TransformTime import transform_time
 
 
@@ -37,11 +38,10 @@ class TestSuite(object):
 
     # 测试用例集列表
     def get_suite_list(self, pro_id):
-        sql = ''' select suite_id, suite_name, remark, username, pro_id, update_time from suite 
-                left join user on creator=user_id 
-                where is_delete = 0 and pro_id = "{}" 
-                order by suite.create_time desc; '''.format(pro_id)
-        data_obj = db.session.execute(sql)
+        suite_obj = db.session.query(
+            SM.suite_id, SM.suite_name, SM.remark, UserModel.username, SM.pro_id, SM.update_time
+        ).join(UserModel, UserModel.user_id == SM.creator)
+        data_obj = suite_obj.filter(SM.is_delete == 0).filter(SM.pro_id == pro_id).order_by(SM.create_time.desc())
         data = [self.__suite_info_serializer(item) for item in data_obj]
         res = Result(data).success()
         return make_response(res)
@@ -52,7 +52,7 @@ class TestSuite(object):
             res = Result(msg='项目名称不能为空').success()
         else:
             suite_id = self.__create_uuid()
-            suite_info = SuiteModel(
+            suite_info = SM(
                 suite_id=suite_id, 
                 suite_name=suite_name,
                 remark=remark,
@@ -67,7 +67,7 @@ class TestSuite(object):
 
     # 编辑测试用例集 (By Zoey)
     def edit_suite(self, suite_id, suite_name, remark, is_delete):
-        suite_info = SuiteModel.query.filter_by(suite_id=suite_id).first()
+        suite_info = SM.query.filter_by(suite_id=suite_id).first()
         if suite_info is None:
             res = Result(msg='suiteID无效，没有查到对应的用例集').success()
         elif is_delete == 1:
