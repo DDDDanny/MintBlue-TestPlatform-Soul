@@ -26,7 +26,8 @@ class ProjectM(object):
         return str(uuid.uuid4())
 
     # 序列化项目信息
-    def __pro_info_serializer(self, pro_item):
+    @staticmethod
+    def __pro_info_serializer(pro_item):
         return {
             'projectID': pro_item[0],
             'projectName': pro_item[1],
