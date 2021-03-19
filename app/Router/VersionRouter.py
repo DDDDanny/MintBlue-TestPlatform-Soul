@@ -18,6 +18,7 @@ VersionBlue = Blueprint('VersionBlue', __name__)
 
 
 @VersionBlue.route('/version/list', methods=['GET'])
+@jwt_required
 def version_list():
     """
     Desc: 版本信息列表接口
@@ -41,6 +42,7 @@ def version_add():
 
 
 @VersionBlue.route('/version/edit', methods=['POST'])
+@jwt_required
 def version_edit():
     """
     Desc: 编辑项目信息接口(删除也用这个接口)
