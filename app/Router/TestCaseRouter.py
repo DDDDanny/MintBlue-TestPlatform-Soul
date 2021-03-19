@@ -18,6 +18,7 @@ TestCaseBlue = Blueprint('TestCaseBlue', __name__)
 
 
 @TestCaseBlue.route('/testcase/list', methods=['GET'])
+@jwt_required
 def testcase_list():
     """
     Desc: 获取测试用例列表接口
@@ -28,6 +29,7 @@ def testcase_list():
 
 
 @TestCaseBlue.route('/testcase/add', methods=['POST'])
+@jwt_required
 def testcase_add():
     """
     Desc: 新增测试用例接口
@@ -36,6 +38,7 @@ def testcase_add():
 
 
 @TestCaseBlue.route('/testcase/edit', methods=['POST'])
+@jwt_required
 def testcase_edit():
     """
     Desc: 编辑测试用例接口
@@ -44,6 +47,7 @@ def testcase_edit():
 
 
 @TestCaseBlue.route('/testcase/del', methods=['POST'])
+@jwt_required
 def testcase_del():
     """
     Desc: 删除测试用例接口
